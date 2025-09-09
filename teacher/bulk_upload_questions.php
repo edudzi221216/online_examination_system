@@ -134,7 +134,10 @@ include '../includes/bulk_question_upload.php';
                                                                         <option value="" selected disabled>-- Select Exam --</option>
                                                                         <?php
                                                                         include '../database/config.php';
-                                                                        $sql = "SELECT exam_id, exam_name, subject, class FROM tbl_examinations ORDER BY exam_name";
+                                                                        $sql = "SELECT exam_id, exam_name, subject, class 
+                                                                            FROM tbl_examinations 
+                                                                            WHERE created_by = '$mytid' 
+                                                                            ORDER BY exam_name";
                                                                         $result = $conn->query($sql);
                                                                         if ($result->num_rows > 0) {
                                                                             while ($row = $result->fetch_assoc()) {
