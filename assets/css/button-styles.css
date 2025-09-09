@@ -1,0 +1,203 @@
+/* Global Button Styles for EMS System */
+
+/* Base button styles */
+.btn {
+    border-radius: 25px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    font-size: 12px !important;
+    min-width: 80px !important;
+}
+
+.btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    text-decoration: none !important;
+}
+
+/* Success buttons (green) */
+.btn-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34) !important;
+    color: white !important;
+}
+
+/* Danger buttons (red) */
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130) !important;
+    color: white !important;
+}
+
+/* Primary buttons (blue) */
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004085) !important;
+    color: white !important;
+}
+
+/* Warning buttons (orange/yellow) */
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107, #ff9800) !important;
+    color: white !important;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e0a800, #e68900) !important;
+    color: white !important;
+}
+
+/* Default buttons (gray) */
+.btn-default {
+    background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+    color: white !important;
+}
+
+.btn-default:hover {
+    background: linear-gradient(135deg, #5a6268, #495057) !important;
+    color: white !important;
+}
+
+/* YouTube buttons (red) - for delete actions */
+.btn-youtube {
+    background: linear-gradient(135deg, #ff0000, #cc0000) !important;
+    color: white !important;
+}
+
+.btn-youtube:hover {
+    background: linear-gradient(135deg, #cc0000, #990000) !important;
+    color: white !important;
+}
+
+/* Disabled states */
+.btn.disabled,
+.btn:disabled {
+    background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+    color: #adb5bd !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
+.btn.disabled:hover,
+.btn:disabled:hover {
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* Button sizes */
+.btn-sm {
+    font-size: 11px !important;
+    min-width: 70px !important;
+    padding: 6px 12px !important;
+}
+
+.btn-lg {
+    font-size: 14px !important;
+    min-width: 100px !important;
+    padding: 10px 20px !important;
+}
+
+.btn-block {
+    width: 100% !important;
+    justify-content: center !important;
+}
+
+/* Special button containers */
+.exam-control-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dropdown buttons */
+.btn.dropdown-toggle {
+    background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+    color: white !important;
+}
+
+.btn.dropdown-toggle:hover {
+    background: linear-gradient(135deg, #5a6268, #495057) !important;
+    color: white !important;
+}
+
+/* Submit buttons with loading state */
+.btn[type="submit"] {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: white !important;
+}
+
+.btn[type="submit"]:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34) !important;
+    color: white !important;
+}
+
+/* Button groups */
+.btn-group .btn {
+    border-radius: 0 !important;
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .btn {
+        font-size: 11px !important;
+        min-width: 70px !important;
+        padding: 6px 10px !important;
+    }
+    
+    .exam-control-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .btn-sm {
+        font-size: 10px !important;
+        min-width: 60px !important;
+    }
+    
+    .btn-lg {
+        font-size: 13px !important;
+        min-width: 90px !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .btn:hover {
+        transform: none !important;
+    }
+} 
