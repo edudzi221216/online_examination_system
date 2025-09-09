@@ -15,18 +15,6 @@ $ay = mysqli_real_escape_string($conn, $_POST['ay']);
 $class = mysqli_real_escape_string($conn, $_POST['class']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-require '../../vendor/phpmailer/phpmailer/src/Exception.php';
-require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
-require '../../vendor/autoload.php';
-
- 
-
-
 $sql = "SELECT * FROM tbl_users WHERE email = '$email'";
 $result = $conn->query($sql);
 
@@ -49,28 +37,10 @@ $sql = "INSERT INTO tbl_users (user_id, first_name, last_name, gender, email, co
 VALUES ('$student_id', '$fname', '$lname', '$gender', '$email', '$contact', '$ay', '$class','$password', null)";
 
     if ($conn->query($sql) === TRUE) {
-        $mail = new PHPMailer(true);
-
         $url = get_server_url();
         $url .= "/login.php";
         
-        $mail->isSMTP();
-        $mail->Mailer     = "smtp";
-        $mail->SMTPDebug  = 0;
-        $mail->SMTPAuth   = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = $mail_port;
-        $mail->Host       = $mail_host;
-        $mail->Username   = $mail_account;
-        $mail->Password   = $mail_password;
-        
-        $mail->setFrom('mistrymadan699@gmail.com', 'Online Examination System');
-        $mail->addAddress($email);
-        
-        $mail->isHTML(true);
-        $mail->Subject = "Online Examination System Student Account";
-        
-        $mail->Body = <<<HTML
+        $mail_body = <<<HTML
         <!DOCTYPE html>
         <html>
           <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
@@ -90,8 +60,9 @@ VALUES ('$student_id', '$fname', '$lname', '$gender', '$email', '$contact', '$ay
         </html>
         HTML;
         
-        $mail->AltBody = "Your Student ID: $student_id\nDefault Password: $default_password\nLogin here: $url";
-        
+        $mail_alt = "Your Student ID: $student_id\nDefault Password: $default_password\nLogin here: $url";
+        $mail = send_mail("Online Examination System Student Account", $mail_body, $email, $mail_alt);
+
         if($email && !$mail->send()){
             echo "Mailer Error: " . $mail->ErrorInfo;
         } else {
