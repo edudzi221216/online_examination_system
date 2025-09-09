@@ -16,4 +16,12 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
 die("<h2>Database Connection Failure : " . $conn->connect_error . "</h2><hr>");
 } 
+
+// mailing account details
+$mail_account = "successinnovativehub@gmail.com";
+$mail_password = "wzap xjim dvpv bhfe";
+$mail_host = "smtp.gmail.com";
+$mail_port = 587;
+
+require_once "helpers.php";
 ?>
