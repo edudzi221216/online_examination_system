@@ -335,7 +335,7 @@ $class = mysqli_real_escape_string($conn, $class); // Sanitize input
                                                                             </button>
                                                                             <ul class="dropdown-menu" role="menu">';
                                                                             
-                                                                        if ($can_edit) {
+                                                                        if (true) {
                                                                             print '
                                                                                 <li><a href="edit-exam.php?eid=' . $row['exam_id'] . '">Edit Exam</a></li>
                                                                                 <li><a href="view-questions.php?eid=' . $row['exam_id'] . '">View Questions</a></li>
