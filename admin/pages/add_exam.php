@@ -45,11 +45,28 @@ $end_time = mysqli_real_escape_string($conn, $_POST['end_time']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
 $class = mysqli_real_escape_string($conn, $_POST['class']);
 
+// convert dates
+$date = date('Y-m-d', strtotime($date));
+if ($end_exam_date) {
+    $end_exam_date = date('Y-m-d', strtotime($end_exam_date));
+} else {
+    $end_exam_date = null; // Set to null if not provided
+}
+
 // Result publication scheduling fields
 $result_publish_start_date = isset($_POST['result_publish_start_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_date']) : null;
 $result_publish_start_time = isset($_POST['result_publish_start_time']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_time']) : null;
 $result_publish_end_date = isset($_POST['result_publish_end_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_end_date']) : null;
 $result_publish_end_time = isset($_POST['result_publish_end_time']) ? mysqli_real_escape_string($conn, $_POST['result_publish_end_time']) : null;
+
+// convert dates
+if ($result_publish_start_date) {
+    $result_publish_start_date = date('Y-m-d', strtotime($result_publish_start_date));
+} 
+
+if ($result_publish_end_date) {
+    $result_publish_end_date = date('Y-m-d', strtotime($result_publish_end_date));
+} 
 
 // Determine result publication status
 $result_publish_status = 'Not Published';
