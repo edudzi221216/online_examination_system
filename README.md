@@ -60,7 +60,7 @@ To run Examoes on your local machine, ensure that you have the following:
 
 1. Clone the Examoes repository from GitHub:
    ```
-   git clone https://github.com/Agbobli5373/online-exam-system.git
+   git clone https://github.com/edudzi221216/online_examination_system.git
    ```
 
 2. Import the `exam_db.sql` file into your MySQL database.
