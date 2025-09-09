@@ -11,15 +11,6 @@ $lname = ucwords(mysqli_real_escape_string($conn, $_POST['lname']));
 $email = mysqli_real_escape_string($conn, $_POST['email']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-require '../../vendor/phpmailer/phpmailer/src/Exception.php';
-require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
-require '../../vendor/autoload.php';
-
 $sql = "SELECT * FROM tbl_teacher WHERE email = '$email'";
 $result = $conn->query($sql);
 
@@ -42,32 +33,43 @@ $sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, emai
 VALUES ('$teacher_id', '$fname', '$lname', '$gender', '$email', '$password')";
 
 if ($conn->query($sql) === TRUE) {
- 
-    $mail=new PHPMailer(true);
+    $url = get_server_url()."/login.php";
+    $subject = "Online Examination System Teacher Account";
 
-    $mail->IsSMTP();
-            
-    $mail->Mailer="smtp";
+    $mail_body = <<<HTML
+    <!DOCTYPE html>
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
+        <p>Dear Teacher,</p>
 
-    $mail->SMTPDebug =0;
-    $mail->SMTPAuth =TRUE;
-    $mail->SMTPSecure ='tls';
-    $mail->Port =587;
-    $mail->Host ="smtp.gmail.com";
-    $mail->Username ="mistrymadan699@gmail.com";
-    $mail->Password ="qmskesryhgwkihzw";
+        <p>
+        Your account has been created successfully. Please find your login details below:
+        </p>
 
-    $mail->SetFrom('mistrymadan699@gmail.com','Online Examination System');
-    $mail->addAddress($email);
-                        // $mail->addAddress($email,$name);
+        <p>
+        <strong>Teacher ID:</strong> {$teacher_id}<br>
+        <strong>Default Password:</strong> {$teacher_id}
+        </p>
 
-    $mail->IsHTML(true);
-    $mail->Subject ="Online Examination System Teacher Account";
-    $mail->Body ="Your Teacher ID  and default Password to login to the system is $teacher_id. Please not to change the password";
-   // $mail->AltBody ="Your student ID  and default Password to login to the system is $student_id";
-   // $mail->MsgHTML("<h1> Your student ID  and default Password to login to the system is $student_id </h1>");
+        <p>
+        You can log in to the system using the link below:<br>
+        <a href="{$url}" target="_blank">{$url}</a>
+        </p>
 
-    if(!$mail->Send()){
+        <p>
+        For security reasons, please change your password immediately after logging in.
+        </p>
+
+        <p>Best regards,<br>
+        Online Examination System Team</p>
+    </body>
+    </html>
+    HTML;
+
+    $body_alt = "Your Teacher ID: $teacher_id\nDefault Password: (provided separately)\nLogin here: $url\nPlease change your password immediately after logging in.";
+    $mail = send_mail($subject, $mail_body, $email, $body_alt);
+
+    if($email && !$mail->send()){
         echo "Error Sending Mail";
     }
     else{

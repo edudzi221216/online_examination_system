@@ -24,6 +24,7 @@
      * @param string $message The message
      * @param string $recepient The email to receive the message
      * @param ?string $alt_message Any alternative message to send if the normal message doesnt go through
+     * @return PHPMailer
      */
     function send_mail($subject, $message, $recepient, $alt_message = null){
         // mailing account details
