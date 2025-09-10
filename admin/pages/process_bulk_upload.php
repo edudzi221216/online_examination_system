@@ -131,6 +131,10 @@ function processTeacherRow($data, $conn, $row) {
     $gender = trim($data[3]);
     $email = trim($data[4]);
     $password = trim($data[5]);
+
+    if(empty($teacherId)){
+        $teacherId = generateUniqueId('TCHR', $conn, 'tbl_teacher', 'teacher_id');
+    }
     
     // Validation
     if (empty($teacherId) || empty($firstName) || empty($lastName) || empty($email) || empty($password)) {
@@ -161,7 +165,14 @@ function processTeacherRow($data, $conn, $row) {
     $stmt = $conn->prepare("INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email, login, role) VALUES (?, ?, ?, ?, ?, ?, 'teacher')");
     $stmt->bind_param("ssssss", $teacherId, $firstName, $lastName, $gender, $email, $hashedPassword);
     
-    return $stmt->execute();
+    $response = $stmt->execute();
+
+    if($response){
+        $mail = setup_teacher_email($teacherId, $email);
+        $mail->send();
+    }
+
+    return $response;
 }
 
 // Process accountant row
@@ -176,6 +187,10 @@ function processAccountantRow($data, $conn, $row) {
     $gender = trim($data[3]);
     $email = trim($data[4]);
     $password = trim($data[5]);
+
+    if(empty($accountantId)){
+        $accountantId = generateUniqueId('ACC', $conn, 'tbl_teacher', 'teacher_id');
+    }
     
     // Validation
     if (empty($accountantId) || empty($firstName) || empty($lastName) || empty($email) || empty($password)) {
@@ -206,7 +221,13 @@ function processAccountantRow($data, $conn, $row) {
     $stmt = $conn->prepare("INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email, login, role) VALUES (?, ?, ?, ?, ?, ?, 'accountant')");
     $stmt->bind_param("ssssss", $accountantId, $firstName, $lastName, $gender, $email, $hashedPassword);
     
-    return $stmt->execute();
+    $response = $stmt->execute();
+    
+    if($response){
+        $mail = setup_accountant_email($accountantId, $email);
+        $mail->send();
+    }
+    return $response;
 }
 
 // Process class row
@@ -289,6 +310,10 @@ function processStudentRow($data, $conn, $row) {
     $contact = trim($data[5]);
     $class = trim($data[6]);
     $academicYear = trim($data[7]);
+
+    if(empty($studentId)){
+        $studentId = generateUniqueId('OES', $conn, 'tbl_users', 'user_id');
+    }
     
     // Validation
     if (empty($studentId) || empty($firstName) || empty($lastName) || empty($email) || empty($class) || empty($academicYear)) {
@@ -321,7 +346,14 @@ function processStudentRow($data, $conn, $row) {
     $stmt = $conn->prepare("INSERT INTO tbl_users (user_id, first_name, last_name, gender, email, contact, ay, class, login, role, acc_stat, fees) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'student', 'Active', 'Paid')");
     $stmt->bind_param("sssssssss", $studentId, $firstName, $lastName, $gender, $email, $contact, $academicYear, $class, $defaultPassword);
     
-    return $stmt->execute();
+    $response = $stmt->execute();
+
+    if($response){
+        $mail = setup_student_email($studentId, $email);
+        $mail->send();
+    }
+
+    return $response;
 }
 
 // Main processing logic

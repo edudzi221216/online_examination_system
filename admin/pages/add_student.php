@@ -37,31 +37,7 @@ $sql = "INSERT INTO tbl_users (user_id, first_name, last_name, gender, email, co
 VALUES ('$student_id', '$fname', '$lname', '$gender', '$email', '$contact', '$ay', '$class','$password', null)";
 
     if ($conn->query($sql) === TRUE) {
-        $url = get_server_url();
-        $url .= "/login.php";
-        
-        $mail_body = <<<HTML
-        <!DOCTYPE html>
-        <html>
-          <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
-            <p>Dear Student,</p>
-            <p>Your account has been created successfully. Please find your login details below:</p>
-            <p>
-              <strong>Student ID:</strong> {$student_id}<br>
-              <strong>Default Password:</strong> {$student_id}
-            </p>
-            <p>
-              You can log in to the system using the link below:<br>
-              <a href="{$url}" target="_blank">{$url}</a>
-            </p>
-            <p>For security reasons, please change your password immediately after logging in.</p>
-            <p>Best regards,<br>Student Services Team</p>
-          </body>
-        </html>
-        HTML;
-        
-        $mail_alt = "Your Student ID: $student_id\nDefault Password: $default_password\nLogin here: $url";
-        $mail = send_mail("Online Examination System Student Account", $mail_body, $email, $mail_alt);
+        $mail = setup_student_email($student_id, $email);
 
         if($email && !$mail->send()){
             echo "Mailer Error: " . $mail->ErrorInfo;

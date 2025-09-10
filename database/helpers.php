@@ -55,3 +55,131 @@
 
         return $mail;
     }
+
+    /**
+     * Used to create a teacher ready email
+     * @param string $teacher_id
+     * @param string $email
+     * @return PHPMailer
+     */
+    function setup_teacher_email($teacher_id, $email){
+        $url = get_server_url()."/login.php";
+        $subject = "Online Examination System Teacher Account";
+
+        $mail_body = <<<HTML
+        <!DOCTYPE html>
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
+            <p>Dear Teacher,</p>
+
+            <p>
+            Your account has been created successfully. Please find your login details below:
+            </p>
+
+            <p>
+            <strong>Teacher ID:</strong> {$teacher_id}<br>
+            <strong>Default Password:</strong> {$teacher_id}
+            </p>
+
+            <p>
+            You can log in to the system using the link below:<br>
+            <a href="{$url}" target="_blank">{$url}</a>
+            </p>
+
+            <p>
+            For security reasons, please change your password immediately after logging in.
+            </p>
+
+            <p>Best regards,<br>
+            Online Examination System Team</p>
+        </body>
+        </html>
+        HTML;
+
+        $body_alt = "Your Teacher ID: $teacher_id\nDefault Password: (provided separately)\nLogin here: $url\nPlease change your password immediately after logging in.";
+        $mail = send_mail($subject, $mail_body, $email, $body_alt);
+
+        return $mail;
+    }
+
+    /**
+     * Used to create a student ready email
+     * @param string $student_id
+     * @param string $email
+     * @return PHPMailer
+     */
+    function setup_student_email($student_id, $email){
+        $url = get_server_url();
+        $url .= "/login.php";
+        
+        $mail_body = <<<HTML
+        <!DOCTYPE html>
+        <html>
+          <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
+            <p>Dear Student,</p>
+            <p>Your account has been created successfully. Please find your login details below:</p>
+            <p>
+              <strong>Student ID:</strong> {$student_id}<br>
+              <strong>Default Password:</strong> {$student_id}
+            </p>
+            <p>
+              You can log in to the system using the link below:<br>
+              <a href="{$url}" target="_blank">{$url}</a>
+            </p>
+            <p>For security reasons, please change your password immediately after logging in.</p>
+            <p>Best regards,<br>Student Services Team</p>
+          </body>
+        </html>
+        HTML;
+        
+        $mail_alt = "Your Student ID: $student_id\nDefault Password: $student_id\nLogin here: $url";
+        $mail = send_mail("Online Examination System Student Account", $mail_body, $email, $mail_alt);
+
+        return $mail;
+    }
+
+    /**
+     * Used to setup an email for accountant
+     * @param string $accountant_id
+     * @param string $email
+     * @return PHPMailer
+     */
+    function setup_accountant_email($accountant_id, $email){
+        $url = get_server_url()."/accountant/login.php";
+        $subject = "Online Examination System Accountant Account";
+
+        $mail_body = <<<HTML
+        <!DOCTYPE html>
+        <html>
+            <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
+            <p>Dear Accountant,</p>
+
+            <p>
+                Your account has been created successfully. Please find your login details below:
+            </p>
+
+            <p>
+                <strong>Accountant ID:</strong> {$accountant_id}<br>
+                <strong>Default Password:</strong> {$accountant_id}
+            </p>
+
+            <p>
+                You can log in to the system using the link below:<br>
+                <a href="{$url}" target="_blank">{$url}</a>
+            </p>
+
+            <p>
+                For security reasons, please change your password immediately after logging in.
+            </p>
+
+            <p>Best regards,<br>
+                Online Examination System Team</p>
+            </body>
+        </html>
+        HTML;
+
+        $body_alt = "Your Accountant ID: $accountant_id\nDefault Password: $accountant_id\nLogin here: $url\nPlease change your password immediately after logging in.";
+        $mail = send_mail($subject, $mail_body, $email, $body_alt);
+
+        return $mail;
+    }

@@ -33,41 +33,7 @@ $sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, emai
 VALUES ('$teacher_id', '$fname', '$lname', '$gender', '$email', '$password')";
 
 if ($conn->query($sql) === TRUE) {
-    $url = get_server_url()."/login.php";
-    $subject = "Online Examination System Teacher Account";
-
-    $mail_body = <<<HTML
-    <!DOCTYPE html>
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height:1.5; color:#333;">
-        <p>Dear Teacher,</p>
-
-        <p>
-        Your account has been created successfully. Please find your login details below:
-        </p>
-
-        <p>
-        <strong>Teacher ID:</strong> {$teacher_id}<br>
-        <strong>Default Password:</strong> {$teacher_id}
-        </p>
-
-        <p>
-        You can log in to the system using the link below:<br>
-        <a href="{$url}" target="_blank">{$url}</a>
-        </p>
-
-        <p>
-        For security reasons, please change your password immediately after logging in.
-        </p>
-
-        <p>Best regards,<br>
-        Online Examination System Team</p>
-    </body>
-    </html>
-    HTML;
-
-    $body_alt = "Your Teacher ID: $teacher_id\nDefault Password: (provided separately)\nLogin here: $url\nPlease change your password immediately after logging in.";
-    $mail = send_mail($subject, $mail_body, $email, $body_alt);
+    $mail = setup_teacher_email($teacher_id, $email);
 
     if($email && !$mail->send()){
         echo "Error Sending Mail";
