@@ -94,6 +94,8 @@ function getExpectedHeaders($uploadType) {
             return ['Subject ID', 'Subject Name', 'Class'];
         case 'students':
             return ['Student ID', 'First Name', 'Last Name', 'Gender', 'Email', 'Contact', 'Class', 'Academic Year'];
+        case "questions":
+            return ['Question Type', 'Question', 'Marks', 'Correct Answer', 'Option A', 'Option B', 'Option C', 'Option D'];
         default:
             return [];
     }
@@ -324,7 +326,7 @@ function processStudentRow($data, $conn, $row) {
 
 // Main processing logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $uploadType = $_POST['upload_type'] ?? '';
+    $uploadType = $_POST['upload_type'] ?? ($_POST['uploadType'] ?? '');
     $csvFile = $_FILES['csv_file'] ?? null;
     
     if (!$csvFile || $csvFile['error'] !== UPLOAD_ERR_OK) {
@@ -334,53 +336,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Validate file type
-    $fileType = pathinfo($csvFile['name'], PATHINFO_EXTENSION);
-    if (strtolower($fileType) !== 'csv') {
-        $_SESSION['upload_error'] = "Only CSV files are allowed.";
-        header('Location: ../bulk_upload_system.php');
+$fileType = pathinfo($csvFile['name'], PATHINFO_EXTENSION);
+if (strtolower($fileType) !== 'csv') {
+    $_SESSION['upload_error'] = "Only CSV files are allowed.";
+    header('Location: ../bulk_upload_system.php');
     exit();
 }
 
-    // Validate file size (5MB max)
-    if ($csvFile['size'] > 5 * 1024 * 1024) {
-        $_SESSION['upload_error'] = "File size must be less than 5MB.";
-        header('Location: ../bulk_upload_system.php');
+// Validate file size (5MB max)
+if ($csvFile['size'] > 5 * 1024 * 1024) {
+    $_SESSION['upload_error'] = "File size must be less than 5MB.";
+    header('Location: ../bulk_upload_system.php');
     exit();
 }
 
-    try {
-        $results = processCSV($csvFile, $uploadType, $conn);
+    if($uploadType == "questions"){
+        require_once $root_path . '/includes/bulk_question_upload.php';
+        $validation_result = validateCSVFormat($csvFile["tmp_name"]);
         
-        if ($results['successful'] > 0) {
-            $_SESSION['upload_success'] = "Successfully uploaded {$results['successful']} out of {$results['total']} records.";
-            if (count($results['errors']) > 0) {
-                $_SESSION['upload_warning'] = "Some records failed to upload. Check the error log for details.";
-            }
-            
+        if($validation_result["valid"]){
+            $exam_id = $_POST['exam_id'];
+            // Process the bulk upload
+            $result = processBulkQuestionUpload($csvFile["tmp_name"], $exam_id, $_SESSION["myid"], $_SESSION["role"], $conn);
+
             // Redirect to view questions if it's a question upload
-            if ($uploadType === 'questions' && isset($_POST['exam_id'])) {
+            if ($uploadType === 'questions' && $result['successful_uploads'] > 0) {
                 $conn->close();
-                header('Location: ../view-questions.php?eid=' . urlencode($_POST['exam_id']));
+                header('Location: ../view-questions.php?eid=' . urlencode($exam_id));
                 exit();
             }
-        } else {
-            $_SESSION['upload_error'] = "No records were uploaded successfully.";
+        }else{
+            $error_message = "CSV format validation failed:\n" . implode("\n", $validation_result['errors']);
+            echo "<script>
+                alert('$error_message');
+                window.location.href='".$_SERVER["HTTP_REFERER"]."';
+                </script>";
         }
-        
-        // Store errors in session for display
-        if (count($results['errors']) > 0) {
-            $_SESSION['upload_errors'] = $results['errors'];
+    }else{
+        try {
+            $results = processCSV($csvFile, $uploadType, $conn);
+            
+            if ($results['successful'] > 0) {
+                $_SESSION['upload_success'] = "Successfully uploaded {$results['successful']} out of {$results['total']} records.";
+                if (count($results['errors']) > 0) {
+                    $_SESSION['upload_warning'] = "Some records failed to upload. Check the error log for details.";
+                }
+            } else {
+                $_SESSION['upload_error'] = "No records were uploaded successfully.";
+            }
+            
+            // Store errors in session for display
+            if (count($results['errors']) > 0) {
+                $_SESSION['upload_errors'] = $results['errors'];
+            }
+            
+        } catch (Exception $e) {
+            $_SESSION['upload_error'] = "Error processing file: " . $e->getMessage();
         }
-        
-    } catch (Exception $e) {
-        $_SESSION['upload_error'] = "Error processing file: " . $e->getMessage();
     }
     
     $conn->close();
-    header('Location: ../bulk_upload_questions.php');
+    header('Location: '.$_SERVER["HTTP_REFERER"]);
     exit();
 } else {
-    header('Location: ../bulk_upload_questions.php');
+    header('Location: '.$_SERVER["HTTP_REFERER"]);
     exit();
 }
 ?> 

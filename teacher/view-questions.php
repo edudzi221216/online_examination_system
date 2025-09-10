@@ -4,7 +4,7 @@ if (isset($_GET['eid'])) {
 include '../database/config.php';
 $exam_id = mysqli_real_escape_string($conn, $_GET['eid']);	
 
-$sql = "SELECT * FROM tbl_examinations WHERE exam_id = '$exam_id' AND created_by='$teacher_id' AND created_by_type='teacher'";
+$sql = "SELECT * FROM tbl_examinations WHERE exam_id = '$exam_id' AND created_by='$mytid' AND created_by_type='teacher'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -164,6 +164,10 @@ header("location:./");
 											 <hr>
 											 
 											 <a';?> onclick = "return confirm('Drop this question ?')" <?php print 'class="btn btn-danger btn-sm"href="pages/drop_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">DROP THIS? <i class="fa fa-trash-o"></i></a>
+                                             <a class="btn btn-primary btn-sm" 
+                                                href="edit_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">
+                                                EDIT <i class="fa fa-pencil"></i>
+                                             </a>
 											 
                                              </div>
 											';	
@@ -175,6 +179,10 @@ header("location:./");
 											 <p><input type="text" name="'.$qno.'"  class="form-control" placeholder="Enter your answer">
 											 
 											 <a';?> onclick = "return confirm('Drop this question ?')" <?php print 'class="btn btn-danger btn-sm"href="pages/drop_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">DROP THIS? <i class="fa fa-trash-o"></i></a>
+                                             <a class="btn btn-primary btn-sm" 
+                                                href="edit_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">
+                                                EDIT <i class="fa fa-pencil"></i>
+                                             </a>
                                              <hr>
                                              </div>
 											';		
@@ -191,7 +199,10 @@ header("location:./");
 											 <hr>
 											 
 											 <a';?> onclick = "return confirm('Drop this question ?')" <?php print 'class="btn btn-danger btn-sm"href="pages/drop_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">DROP THIS? <i class="fa fa-trash-o"></i></a>
-											 
+											 <a class="btn btn-primary btn-sm" 
+                                                href="edit_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">
+                                                EDIT <i class="fa fa-pencil"></i>
+                                             </a>
                                              </div>
 											';	
 											}else{
@@ -202,6 +213,10 @@ header("location:./");
 											 <p style="font-size:15px;"><b>Answer: '.$answer.'</b></p>
 											 
 											 <a';?> onclick = "return confirm('Drop this question ?')" <?php print 'class="btn btn-danger btn-sm"href="pages/drop_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">DROP THIS? <i class="fa fa-trash-o"></i></a>
+                                             <a class="btn btn-primary btn-sm" 
+                                                href="edit_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">
+                                                EDIT <i class="fa fa-pencil"></i>
+                                             </a>
                                              <hr>
                                              </div>
 											';		
@@ -222,7 +237,10 @@ header("location:./");
                                                 <p style="font-size:15px;"><b> Answer : '.$answer.'</b></p>
                                                  
                                                  <a';?> onclick = "return confirm('Drop this question ?')" <?php print 'class="btn btn-danger btn-sm"href="pages/drop_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">DROP THIS? <i class="fa fa-trash-o"></i></a>
-                                                 
+                                                 <a class="btn btn-primary btn-sm" 
+                                                    href="edit_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">
+                                                    EDIT <i class="fa fa-pencil"></i>
+                                                </a>
                                              </div>
 											';	
 											}else{
@@ -237,6 +255,10 @@ header("location:./");
                                                 <p style="font-size:15px;"><b> Answer : '.$answer.'</b></p>
                                                  
                                                  <a';?> onclick = "return confirm('Drop this question ?')" <?php print 'class="btn btn-danger btn-sm"href="pages/drop_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">DROP THIS? <i class="fa fa-trash-o"></i></a>
+                                                 <a class="btn btn-primary btn-sm" 
+                                                    href="edit_question.php?id='.$row['question_id'].'&eid='.$exam_id.'">
+                                                    EDIT <i class="fa fa-pencil"></i>
+                                                </a>
                                              <hr>
                                              </div>
 											';		
