@@ -296,8 +296,8 @@ $class = mysqli_real_escape_string($conn, $class); // Sanitize input
 
                                                             while ($row = $result->fetch_assoc()) {
                                                                 // Combine date and time for easier JavaScript parsing
-                                                                $full_start_time = $row['date'] . ' ' . $row['start_time'];
-                                                                $full_end_time = $row['date'] . ' ' . $row['end_time'];
+                                                                $full_start_time = $row['date'] . 'T' . $row['start_time'];
+                                                                $full_end_time   = $row['date'] . 'T' . $row['end_time'];
                                                                 
                                                                 // Check if current user can edit this exam (only the creator can edit, regardless of role)
                                                                 $can_edit = ($row['created_by'] === $_SESSION['myid'] && $row['created_by_type'] === $_SESSION['role']);

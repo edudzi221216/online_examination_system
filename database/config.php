@@ -17,5 +17,8 @@ if ($conn->connect_error) {
 die("<h2>Database Connection Failure : " . $conn->connect_error . "</h2><hr>");
 } 
 
-require_once "helpers.php";
+// only include for server side scripts
+if(!empty($_SERVER["DOCUMENT_ROOT"])){
+    include_once "helpers.php";
+}
 ?>
