@@ -14,6 +14,7 @@ if (isset($_GET['tid'])) {
             $tdlname = $row['last_name'];
             $tdgender = $row['gender'];
             $tdemail = $row['email'];
+            $tdphone = $row['contact'];
         }
     } else {
         header("location:./");
@@ -184,10 +185,16 @@ if (isset($_GET['tid'])) {
                                                 <input type="email" value="<?php echo "$tdemail"; ?>" class="form-control" placeholder="Enter email address" name="email" required autocomplete="off">
                                             </div>
 
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Phone Number</label>
+                                                <input type="tel" class="form-control" placeholder="Enter Phone Number" name="contact" autocomplete="off" value="<?= $tdphone ?>">
+                                            </div>
+
 
                                             <input type="hidden" name="teacher_id" value="<?php echo "$teacher_id"; ?>">
 
                                             <button type="submit" class="btn btn-primary">Update <?php echo "$sdfname"; ?></button>
+                                            <button type="button" onclick="location.href='accountant.php'" class="btn btn-primary">Cancel</button>
                                         </form>
                                     </div>
                                 </div>

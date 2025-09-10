@@ -9,7 +9,7 @@ $password = md5($teacher_id) ;
 $fname = ucwords(mysqli_real_escape_string($conn, $_POST['fname']));
 $lname = ucwords(mysqli_real_escape_string($conn, $_POST['lname']));
 $email = mysqli_real_escape_string($conn, $_POST['email']);
-$phone = mysqli_real_escape_string($conn, $_POST['phone']);
+$contact = mysqli_real_escape_string($conn, $_POST['contact']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
 
 
@@ -29,8 +29,8 @@ if ($result->num_rows > 0) {
     }
 } else {
 //	insert the new value
-$sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email,login, role)
-VALUES ('$teacher_id', '$fname', '$lname', '$gender',  '$email',  '$password', 'accountant')";
+$sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email,login, role, contact)
+VALUES ('$teacher_id', '$fname', '$lname', '$gender',  '$email',  '$password', 'accountant', '$contact')";
 
 if ($conn->query($sql) === TRUE) {
   

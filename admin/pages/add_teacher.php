@@ -10,6 +10,7 @@ $fname = ucwords(mysqli_real_escape_string($conn, $_POST['fname']));
 $lname = ucwords(mysqli_real_escape_string($conn, $_POST['lname']));
 $email = mysqli_real_escape_string($conn, $_POST['email']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
+$contact = mysqli_real_escape_string($conn, $_POST['contact']);
 
 $sql = "SELECT * FROM tbl_teacher WHERE email = '$email'";
 $result = $conn->query($sql);
@@ -29,8 +30,8 @@ if ($result->num_rows > 0) {
     }
 } else {
 //	insert the new value
-$sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email, login)
-VALUES ('$teacher_id', '$fname', '$lname', '$gender', '$email', '$password')";
+$sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email, login, contact)
+VALUES ('$teacher_id', '$fname', '$lname', '$gender', '$email', '$password', '$contact')";
 
 if ($conn->query($sql) === TRUE) {
     $mail = setup_teacher_email($teacher_id, $email);

@@ -10,6 +10,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
 	$mygender = $_SESSION['gender'];
 	$myemail = $_SESSION['email'];
 	$myrole = $_SESSION['role'];
+	$myphone = $_SESSION["contact"];
 	
 
 	

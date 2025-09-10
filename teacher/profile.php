@@ -141,6 +141,13 @@
                                                 <td><b><?php echo "$myemail"; ?></b></td>
                                                
                                             </tr>
+
+                                            <tr>
+                                                <th scope="row">5.</th>
+                                                <td>Phone Number</td>
+                                                <td><b><?php echo "$myphone"; ?></b></td>
+                                               
+                                            </tr>
 											
                                         </tbody>
                                     </table>

@@ -3,3 +3,4 @@ ALTER TABLE `tbl_assessment_records` ADD `user_answers` JSON NULL DEFAULT NULL A
 
 TRUNCATE TABLE `tbl_examinations`;
 ALTER TABLE `tbl_examinations` CHANGE `date` `date` DATE NOT NULL, CHANGE `end_exam_date` `end_exam_date` DATE NULL DEFAULT NULL;
+ALTER TABLE `tbl_teacher` ADD `contact` VARCHAR(30) NULL AFTER `email`;
