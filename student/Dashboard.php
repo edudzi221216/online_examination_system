@@ -128,6 +128,8 @@ include 'includes/fetch_records.php';
 						
 						
                     </div>
+
+                    <?php $dashboard = true; include_once "includes/active_exams.php"; ?>
 					
 					
 					

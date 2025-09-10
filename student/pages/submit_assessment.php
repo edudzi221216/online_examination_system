@@ -8,6 +8,10 @@ $mytotal_marks = 0;
 $exam_id = $_POST['eid'];
 $record = $_POST['ri'];
 
+// store user's answers for the exam
+$answers = $_POST["user_answers"] ? json_decode($_POST["user_answers"], true) : "";
+$answers = is_array($answers) ? json_encode($answers, JSON_UNESCAPED_SLASHES) : null;
+
 while ($starting_mark <= $total_questions) { // lets say starting marks is 1 and total_question is 3
 if (strtoupper(base64_decode($_POST['ran'.$starting_mark.''])) == strtoupper($_POST['an'.$starting_mark.''])) {
    // ran and an comes from the assessment page
@@ -30,9 +34,11 @@ $status = "FAIL";
 session_start();
 $_SESSION['record_id'] = $record;
 include '../../database/config.php';
-$sql = "UPDATE tbl_assessment_records SET score='$mytotal_marks', status='$status' WHERE record_id='$record'";
-// this 
-if ($conn->query($sql) === TRUE) {
+
+$stmt = $conn->prepare("UPDATE tbl_assessment_records SET score = ?, status = ?, user_answers = ? WHERE record_id = ?");
+$stmt->bind_param("isss", $mytotal_marks, $status, $answers, $record);
+
+if ($stmt->execute()) {
 
 	
    header("location:../submit_su.php");

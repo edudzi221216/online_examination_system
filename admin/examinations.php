@@ -298,6 +298,7 @@ $class = mysqli_real_escape_string($conn, $class); // Sanitize input
                                                                 // Combine date and time for easier JavaScript parsing
                                                                 $full_start_time = $row['date'] . 'T' . $row['start_time'];
                                                                 $full_end_time   = $row['date'] . 'T' . $row['end_time'];
+                                                                $now = date("Y-m-d\TH:i:s");
                                                                 
                                                                 // Check if current user can edit this exam (only the creator can edit, regardless of role)
                                                                 $can_edit = ($row['created_by'] === $_SESSION['myid'] && $row['created_by_type'] === $_SESSION['role']);
@@ -335,7 +336,7 @@ $class = mysqli_real_escape_string($conn, $class); // Sanitize input
                                                                             </button>
                                                                             <ul class="dropdown-menu" role="menu">';
                                                                             
-                                                                        if (true) {
+                                                                        if ($can_edit) {
                                                                             print '
                                                                                 <li><a href="edit-exam.php?eid=' . $row['exam_id'] . '">Edit Exam</a></li>
                                                                                 <li><a href="view-questions.php?eid=' . $row['exam_id'] . '">View Questions</a></li>
