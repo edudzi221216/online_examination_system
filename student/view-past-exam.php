@@ -18,11 +18,11 @@ $exam_name = $exam['exam_name'];
 $subject = $exam['subject'];
 $class = $exam['class'];
 
-// Check if student has taken this exam
-$check_sql = "SELECT ar.*, e.status as exam_status, e.end_exam_date, e.end_time, e.date as exam_date   
-    FROM tbl_assessment_records ar 
-    LEFT JOIN tbl_examinations e ON ar.exam_id = e.exam_id
-    WHERE ar.student_id = '$myid' AND ar.exam_id = '$exam_id'";
+// Check if student has taken this exam or exam is valid
+$check_sql = "SELECT ar.*, e.result_publish_status, e.end_exam_date, e.end_time, e.date as exam_date   
+    FROM tbl_examinations e
+    LEFT JOIN tbl_assessment_records ar ON ar.exam_id = e.exam_id
+    WHERE (ar.student_id = '$myid' AND ar.exam_id = '$exam_id') OR e.exam_id = '$exam_id'";
 $check_result = $conn->query($check_sql);
 
 if (!$check_result || $check_result->num_rows === 0) {
@@ -43,9 +43,10 @@ if(!$answers){
 // Check if exam results have been officially published
 $current_time = time();
 $exam_end_time = strtotime($exam_record['end_exam_date'] ?? $exam_record["exam_date"] . ' ' . $exam_record['end_time']);
-$results_published = $exam_record['rstatus'] === 'Result Published' || $exam_record['exam_status'] === 'Published';
+$results_published = $exam_record['rstatus'] === 'Result Published' || $exam_record['result_publish_status'] === 'Published';
+$exam_over = $current_time > $exam_end_time;
 
-if (!$results_published) {
+if (!$results_published && !$exam_over) {
     $_SESSION['error'] = "Exam results have not been officially published yet. You can view questions once the exam period ends and results are published.";
     header("Location: ./");
     exit();
@@ -222,7 +223,7 @@ if ($q_result && $q_result->num_rows > 0) {
                                                 <div class="question-pane">
                                                     <p style="font-size:17px;">
                                                         <b>Question <?php echo $qno; ?>.</b> 
-                                                        <?php echo $qs; ?> 
+                                                        <?php echo htmlspecialchars_decode($qs); ?> 
                                                         <?php echo $type_badge; ?>
                                                     </p>
                                                     <p style="text-align:right;"><b>Marks: <?php echo $qmarks; ?></b></p>

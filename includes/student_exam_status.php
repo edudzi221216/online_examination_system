@@ -148,7 +148,7 @@ function generateExamActionButton($exam, $exam_status) {
         $exam_end_time = strtotime($exam['end_exam_date'] . ' ' . $exam['end_time']);
         
         // Check if student has taken the exam and has results
-        $results_published = $exam["rstatus"] == "Result Published" || $exam["status"] == "Completed";
+        $results_published = $exam["rstatus"] == "Result Published" || $exam["result_publish_status"] == "Published";
         
         if ($results_published) {
             return '<a class="btn btn-info btn-rounded btn-sm" href="view-past-exam.php?id=' . $exam_id . '">
