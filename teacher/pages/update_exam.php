@@ -31,7 +31,7 @@ $exam = ucwords(mysqli_real_escape_string($conn, $_POST['exam']));
 $duration = mysqli_real_escape_string($conn, $_POST['duration']);
 $passmark = mysqli_real_escape_string($conn, $_POST['passmark']);
 $f_marks = mysqli_real_escape_string($conn, $_POST['fmarks']);
-$attempts = mysqli_real_escape_string($conn, $_POST['attempts']);
+$attempts = mysqli_real_escape_string($conn, $_POST['attempts'] ?? 0);
 $date = mysqli_real_escape_string($conn, $_POST['date']);
 $end_exam_date = mysqli_real_escape_string($conn, $_POST['end_exam_date']);
 $start_time = mysqli_real_escape_string($conn, $_POST['start_time']);
@@ -39,11 +39,22 @@ $end_time = mysqli_real_escape_string($conn, $_POST['end_time']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
 $class = mysqli_real_escape_string($conn, $_POST['class']);
 
+$date = date('Y-m-d', strtotime($date));
+$end_exam_date = $end_exam_date ? "'".date('Y-m-d', strtotime($end_exam_date))."'" : "NULL";
+
 // Result publication scheduling fields
 $result_publish_start_date = isset($_POST['result_publish_start_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_date']) : null;
 $result_publish_start_time = isset($_POST['result_publish_start_time']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_time']) : null;
 $result_publish_end_date = isset($_POST['result_publish_end_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_end_date']) : null;
 $result_publish_end_time = isset($_POST['result_publish_end_time']) ? mysqli_real_escape_string($conn, $_POST['result_publish_end_time']) : null;
+
+if($result_publish_start_date) {
+    $result_publish_start_date = date('Y-m-d', strtotime($result_publish_start_date));
+}
+
+if($result_publish_end_date) {
+    $result_publish_end_date = date('Y-m-d', strtotime($result_publish_end_date));
+}
 
 // Determine result publication status
 $result_publish_status = 'Not Published';
@@ -64,8 +75,10 @@ echo "<script>
     }
 } else {
 
-$sql = "UPDATE tbl_examinations SET class = '$class', subject = '$subject', exam_name = '$exam', date = '$date', end_exam_date = '$end_exam_date', start_time = '$start_time', end_time = '$end_time', duration = '$duration', passmark = '$passmark', full_marks = '$f_marks', re_exam = '$attempts', result_publish_start_date = " . ($result_publish_start_date ? "'$result_publish_start_date'" : "NULL") . ", result_publish_start_time = " . ($result_publish_start_time ? "'$result_publish_start_time'" : "NULL") . ", result_publish_end_date = " . ($result_publish_end_date ? "'$result_publish_end_date'" : "NULL") . ", result_publish_end_time = " . ($result_publish_end_time ? "'$result_publish_end_time'" : "NULL") . ", result_publish_status = '$result_publish_status' WHERE exam_id = '$exam_id'";
-
+$sql = "UPDATE tbl_examinations 
+        SET class = '$class', subject = '$subject', exam_name = '$exam', date = '$date', 
+            end_exam_date = $end_exam_date, start_time = '$start_time', end_time = '$end_time', duration = '$duration', passmark = 
+            '$passmark', full_marks = '$f_marks', re_exam = '$attempts', result_publish_start_date = " . ($result_publish_start_date ? "'$result_publish_start_date'" : "NULL") . ", result_publish_start_time = " . ($result_publish_start_time ? "'$result_publish_start_time'" : "NULL") . ", result_publish_end_date = " . ($result_publish_end_date ? "'$result_publish_end_date'" : "NULL") . ", result_publish_end_time = " . ($result_publish_end_time ? "'$result_publish_end_time'" : "NULL") . ", result_publish_status = '$result_publish_status' WHERE exam_id = '$exam_id'";
 if ($conn->query($sql) === TRUE) {
 echo "<script>
     alert('$exam' + ' is Successfully Updated.');

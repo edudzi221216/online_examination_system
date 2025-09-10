@@ -7,7 +7,7 @@ include '../../includes/bulk_question_upload.php';
 include '../includes/check_user.php';
 
 // Check if user is logged in
-if (!isset($_SESSION['teacher_id'])) {
+if (!isset($_SESSION['login'])) {
     header("Location: ../login.php");
     exit();
 }

@@ -145,7 +145,8 @@ function checkResultPublication($exam_id, $conn) {
  * @return void
  */
 function autoStartExams($conn) {
-    $current_date = date('m/d/Y');
+    // $current_date = date('m/d/Y');
+    $current_date = date('Y-m-d');
     $current_time = date('H:i:s');
     
     // Find exams that should start now
@@ -164,7 +165,6 @@ function autoStartExams($conn) {
             WHERE (date < '$current_date') 
             OR (date = '$current_date' AND end_time < '$current_time') 
             AND status = 'Active'";
-    
     $conn->query($sql);
 }
 

@@ -199,6 +199,7 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
 
 
                                 <form action="pages/submit_assessment.php" method="POST" onsubmit="setFormSubmitting()" name="quiz" id="quiz_form">
+                                    <input type="hidden" name="user_answers" id="user_answers" value='' />
                                     <div class="tab-content">
                                         <?php
                                         include '../database/config.php';
@@ -223,17 +224,17 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
                                                     if ($qno == "1") {
                                                         print '
 											<div role="tabpanel" class="tab-content" id="tab' . $qno . '">
-                                             <p><b>' . $qno . '.</b> ' . $qs . '</p>
-											 <p><input type="text" name="an' . $qno . '"  class="form-control" placeholder="Enter your answer" autocomplete="off">
-                                             <input type="hidden" name="qst' . $qno . '" value="' . base64_encode($qs) . '">
-											 <input type="hidden" name="ran' . $qno . '" value="' . base64_encode($ans) . '">
-                                             </div>
+                                                <p><b>' . $qno . '.</b> ' . $qs . '</p>
+                                                <p><input type="text" data-question-id="'.$qsid.'" onblur="getSelectedValue()" name="an' . $qno . '"  class="form-control" placeholder="Enter your answer" autocomplete="off">
+                                                <input type="hidden" name="qst' . $qno . '" value="' . base64_encode($qs) . '">
+                                                <input type="hidden" name="ran' . $qno . '" value="' . base64_encode($ans) . '">
+                                            </div>
 											';
                                                     } else {
                                                         print '
 											<div role="tabpanel" class="tab-content" id="tab' . $qno . '">
                                              <p><b>' . $qno . '.</b> ' . $qs . '</p>
-											 <p><input type="text" name="an' . $qno . '"  class="form-control" placeholder="Enter your answer" autocomplete="off">
+											 <p><input type="text" data-question-id="'.$qsid.'" onblur="getSelectedValue()" name="an' . $qno . '"  class="form-control" placeholder="Enter your answer" autocomplete="off">
 					                         <input type="hidden" name="qst' . $qno . '" value="' . base64_encode($qs) . '">
 											 <input type="hidden" name="ran' . $qno . '" value="' . base64_encode($ans) . '">
                                              </div>
@@ -250,10 +251,10 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
                                             <p class ="block" style= "font-size: 17px;"><b>Q.' . $qno . '.</b> ' . $qs . '</p>
                                             <p style="text-align:right;z">[<b> Marks ' . $qmarks . '</b>]</p>
                                             <br>
-											 <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op1 . '"> ' . $op1 . '<span class="checkmark"></span></p></label>
-                                             <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op2 . '"> ' . $op2 . '<span class="checkmark"></span></p></label>
-                                             <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op3 . '"> ' . $op3 . '<span class="checkmark"></span></p></label>
-                                             <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op4 . '"> ' . $op4 . '<span class="checkmark"></span></p></label>
+											 <label class="container"><input data-question-id="'.$qsid.'" type="radio" name="an' . $qno . '"  value="' . $op1 . '" onchange="getSelectedValue()"> ' . $op1 . '<span class="checkmark"></span></p></label>
+                                             <label class="container"><input data-question-id="'.$qsid.'" type="radio" name="an' . $qno . '"  value="' . $op2 . '" onchange="getSelectedValue()"> ' . $op2 . '<span class="checkmark"></span></p></label>
+                                             <label class="container"><input data-question-id="'.$qsid.'" type="radio" name="an' . $qno . '"  value="' . $op3 . '" onchange="getSelectedValue()"> ' . $op3 . '<span class="checkmark"></span></p></label>
+                                             <label class="container"><input data-question-id="'.$qsid.'" type="radio" name="an' . $qno . '"  value="' . $op4 . '" onchange="getSelectedValue()"> ' . $op4 . '<span class="checkmark"></span></p></label>
 											 <input type="hidden" name="qst' . $qno . '" value="' . base64_encode($qs) . '">
 											 <input type="hidden" name="ran' . $qno . '" value="' . base64_encode($enan) . '">
                                              <br>
@@ -266,10 +267,10 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
                                             <p class ="block" style= "font-size: 17px;"><b>Q.' . $qno . '.</b> ' . $qs . '</p>
                                             <p style="text-align:right;z">[<b> Marks ' . $qmarks . '</b>]</p>
                                             <br>
-											 <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op1 . '"> ' . $op1 . '<span class="checkmark"></span></p></label>
-                                             <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op2 . '"> ' . $op2 . '<span class="checkmark"></span></p></label>
-                                             <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op3 . '"> ' . $op3 . '<span class="checkmark"></span></p></label>
-                                             <label class="container"><input type="radio" name="an' . $qno . '"  value="' . $op4 . '"> ' . $op4 . '<span class="checkmark"></span></p></label>
+											 <label class="container"><input data-question-id="'.$qsid.'" onchange="getSelectedValue()" type="radio" name="an' . $qno . '"  value="' . $op1 . '"> ' . $op1 . '<span class="checkmark"></span></p></label>
+                                             <label class="container"><input data-question-id="'.$qsid.'" onchange="getSelectedValue()" type="radio" name="an' . $qno . '"  value="' . $op2 . '"> ' . $op2 . '<span class="checkmark"></span></p></label>
+                                             <label class="container"><input data-question-id="'.$qsid.'" onchange="getSelectedValue()" type="radio" name="an' . $qno . '"  value="' . $op3 . '"> ' . $op3 . '<span class="checkmark"></span></p></label>
+                                             <label class="container"><input data-question-id="'.$qsid.'" onchange="getSelectedValue()" type="radio" name="an' . $qno . '"  value="' . $op4 . '"> ' . $op4 . '<span class="checkmark"></span></p></label>
 											 <input type="hidden" name="qst' . $qno . '" value="' . base64_encode($qs) . '">
 											 <input type="hidden" name="ran' . $qno . '" value="' . base64_encode($enan) . '">
                                              <br>
@@ -304,7 +305,7 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
                                         }
 
                                         /* Hide the browser's default radio button */
-                                        .container input {
+                                        .container input[type="radio"] {
                                             position: absolute;
                                             opacity: 0;
                                             cursor: pointer;
@@ -428,16 +429,6 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
     <script src="../assets/plugins/3d-bold-navigation/js/main.js"></script>
     <script src="../assets/js/modern.min.js"></script>
 
-    <script type="text/javascript">
-        $document.ready(function() {
-            $('block').bind('cut copy paste', function(e) {
-                e.preventDefault();
-            })
-            $('block').on("contextmenu", function(e) {
-                return false;
-            })
-        })
-    </script>
     <!--TIMER-->
     <script type="text/javascript">
         var max_time = <?php echo "$duration" ?>;
@@ -503,8 +494,6 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
                 if (a <= 2) {
                     alert("You have moved " + a + " times from the Exam window. You are not allowed to do this.");
                 } else if (a == 3) {
-                    alert("We are watching you! You have moved " + a + " times from the Exam window. You are not allowed to do this.\nThis is the Final Warning for you.");
-                } else if (a == 4) {
                     alert("You are moving away from the browser too many times. Your Exam has been Submitted.");
                     setTimeout('document.quiz.submit()', 4);
                 } else {}
@@ -512,6 +501,37 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
 
         });
     </script><!--Tab change code ends here-->
+
+    <!-- Prevent copy, paste and right click -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            $("input[type=text]").on("keydown keyup", function(e){
+                if (e.ctrlKey && (e.key === "v" || e.key === "c" || e.key === "x")) {
+                    e.preventDefault();
+                    alert("Copy and Paste are disabled!");
+                }
+            });
+
+            // disable right click
+            document.addEventListener("contextmenu", function(e){
+                e.preventDefault();
+            });
+
+        })
+    </script>
+
+    <!-- Take user's values for each question -->
+    <script>
+        var user_answers = {};
+
+        function getSelectedValue() {
+            const element = $(event.target);
+            const questionId = element.attr("data-question-id");
+            user_answers[questionId] = element.val();
+
+            document.getElementById("user_answers").value = JSON.stringify(user_answers);
+        }
+    </script>
 </body>
 
 </html>

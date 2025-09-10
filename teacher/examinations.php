@@ -309,8 +309,8 @@ $teacher_id = $mytid; // Use the variable from check_user.php
      
                                                             while ($row = $result->fetch_assoc()) {
                                                                 // Combine date and time for easier JavaScript parsing
-                                                                $full_start_time = $row['date'] . ' ' . $row['start_time'];
-                                                                $full_end_time = $row['date'] . ' ' . $row['end_time'];
+                                                                $full_start_time = $row['date'] . 'T' . $row['start_time'];
+                                                                $full_end_time   = $row['date'] . 'T' . $row['end_time'];
                                                                 
                                                                 // Check if current teacher can edit this exam (only their own)
                                                                 $can_edit = ($row['created_by'] === $_SESSION['myid'] && $row['created_by_type'] === 'teacher');

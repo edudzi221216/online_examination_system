@@ -16,4 +16,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
 die("<h2>Database Connection Failure : " . $conn->connect_error . "</h2><hr>");
 } 
+
+// only include for server side scripts
+if(!empty($_SERVER["DOCUMENT_ROOT"])){
+    include_once "helpers.php";
+}
 ?>

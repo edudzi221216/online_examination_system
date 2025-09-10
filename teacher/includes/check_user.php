@@ -1,5 +1,5 @@
 <?php
-session_start();
+@session_start();
 if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
 	// checks whether the variable is set or not
 
@@ -9,6 +9,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
 	$mylname = $_SESSION['last_name'];
 	$mygender = $_SESSION['gender'];
 	$myemail = $_SESSION['email'];
+	$myphone = $_SESSION["contact"];
 	$myrole = $_SESSION['role'];
 	
 	

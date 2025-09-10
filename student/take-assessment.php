@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
 	$status = $row['status'];
 	$today_date = date('Y/m/d');    
     $next_retake = date('m/d/Y', strtotime($today_date. ' + '.$reexam.' days'));  
-	$dcv = date_format(date_create_from_format('m/d/Y', $deadline), 'Y/m/d');
+	$dcv = date_format(date_create_from_format('Y-m-d', $deadline), 'Y/m/d');
 	
 	// Check exam availability using enhanced scheduler
 	$availability = checkExamAvailability($exam_id, $conn);
@@ -287,7 +287,7 @@ header("location:./");
                                 
 								print '
                                  <div class="alert alert-success" role="alert">
-                                  You Exam is Submitted.
+                                  Your Exam is Submitted.
                                     </div>
 
 									'; /*?>

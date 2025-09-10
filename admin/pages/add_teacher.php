@@ -10,15 +10,7 @@ $fname = ucwords(mysqli_real_escape_string($conn, $_POST['fname']));
 $lname = ucwords(mysqli_real_escape_string($conn, $_POST['lname']));
 $email = mysqli_real_escape_string($conn, $_POST['email']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-require '../../vendor/phpmailer/phpmailer/src/Exception.php';
-require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
-require '../../vendor/autoload.php';
+$contact = mysqli_real_escape_string($conn, $_POST['contact']);
 
 $sql = "SELECT * FROM tbl_teacher WHERE email = '$email'";
 $result = $conn->query($sql);
@@ -38,36 +30,13 @@ if ($result->num_rows > 0) {
     }
 } else {
 //	insert the new value
-$sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email, login)
-VALUES ('$teacher_id', '$fname', '$lname', '$gender', '$email', '$password')";
+$sql = "INSERT INTO tbl_teacher (teacher_id, first_name, last_name, gender, email, login, contact)
+VALUES ('$teacher_id', '$fname', '$lname', '$gender', '$email', '$password', '$contact')";
 
 if ($conn->query($sql) === TRUE) {
- 
-    $mail=new PHPMailer(true);
+    $mail = setup_teacher_email($teacher_id, $email);
 
-    $mail->IsSMTP();
-            
-    $mail->Mailer="smtp";
-
-    $mail->SMTPDebug =0;
-    $mail->SMTPAuth =TRUE;
-    $mail->SMTPSecure ='tls';
-    $mail->Port =587;
-    $mail->Host ="smtp.gmail.com";
-    $mail->Username ="mistrymadan699@gmail.com";
-    $mail->Password ="qmskesryhgwkihzw";
-
-    $mail->SetFrom('mistrymadan699@gmail.com','Online Examination System');
-    $mail->addAddress($email);
-                        // $mail->addAddress($email,$name);
-
-    $mail->IsHTML(true);
-    $mail->Subject ="Online Examination System Teacher Account";
-    $mail->Body ="Your Teacher ID  and default Password to login to the system is $teacher_id. Please not to change the password";
-   // $mail->AltBody ="Your student ID  and default Password to login to the system is $student_id";
-   // $mail->MsgHTML("<h1> Your student ID  and default Password to login to the system is $student_id </h1>");
-
-    if(!$mail->Send()){
+    if($email && !$mail->send()){
         echo "Error Sending Mail";
     }
     else{

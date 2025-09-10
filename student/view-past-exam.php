@@ -18,42 +18,35 @@ $exam_name = $exam['exam_name'];
 $subject = $exam['subject'];
 $class = $exam['class'];
 
-// Check if student has taken this exam
-$check_sql = "SELECT * FROM tbl_assessment_records WHERE student_id = '$myid' AND exam_id = '$exam_id'";
+// Check if student has taken this exam or exam is valid
+$check_sql = "SELECT ar.*, e.result_publish_status, e.end_exam_date, e.end_time, e.date as exam_date   
+    FROM tbl_examinations e
+    LEFT JOIN tbl_assessment_records ar ON ar.exam_id = e.exam_id
+    WHERE (ar.student_id = '$myid' AND ar.exam_id = '$exam_id') OR e.exam_id = '$exam_id'";
 $check_result = $conn->query($check_sql);
 
 if (!$check_result || $check_result->num_rows === 0) {
-    $_SESSION['error'] = "You haven't taken this exam yet.";
+    $_SESSION['error'] = "Exam Record not found";
     header("Location: ./");
     exit();
 }
 
 $exam_record = $check_result->fetch_assoc();
-$score = $exam_record['score'];
-$status = $exam_record['status'];
+$score = $exam_record['score'] ?? 0;
+$status = $exam_record['status'] ?? "FAIL";
+$answers = $exam_record['user_answers'] ? json_decode($exam_record['user_answers'], true) : [];
 
-// Check if exam results have been officially published
-$exam_sql = "SELECT * FROM tbl_examinations WHERE exam_id = '$exam_id'";
-$exam_result = $conn->query($exam_sql);
-$exam_data = $exam_result->fetch_assoc();
-
-$current_time = time();
-$exam_end_time = strtotime($exam_data['end_exam_date'] . ' ' . $exam_data['end_time']);
-$results_published = false;
-
-// Check the rstatus field in assessment records first
-if (isset($exam_record['rstatus']) && $exam_record['rstatus'] === 'Result Published') {
-    $results_published = true;
-} else {
-    // Fallback: Results are considered published if:
-    // 1. Exam has ended (current time > exam end time)
-    // 2. Student has a score recorded
-    if ($current_time > $exam_end_time && !empty($score)) {
-        $results_published = true;
-    }
+if(!$answers){
+    $answers = [];
 }
 
-if (!$results_published) {
+// Check if exam results have been officially published
+$current_time = time();
+$exam_end_time = strtotime($exam_record['end_exam_date'] ?? $exam_record["exam_date"] . ' ' . $exam_record['end_time']);
+$results_published = $exam_record['rstatus'] === 'Result Published' || $exam_record['result_publish_status'] === 'Published';
+$exam_over = $current_time > $exam_end_time;
+
+if (!$results_published && !$exam_over) {
     $_SESSION['error'] = "Exam results have not been officially published yet. You can view questions once the exam period ends and results are published.";
     header("Location: ./");
     exit();
@@ -210,6 +203,7 @@ if ($q_result && $q_result->num_rows > 0) {
                                             <?php
                                             $qno = 1;
                                             foreach ($questions as $q) {
+                                                $qid = $q['question_id'];
                                                 $type = !empty($q['question_type']) ? $q['question_type'] : (!empty($q['type']) ? $q['type'] : '');
                                                 $qmarks = htmlspecialchars($q['Qmarks'] ?? '');
                                                 $qs = htmlspecialchars($q['question'] ?? '');
@@ -229,22 +223,24 @@ if ($q_result && $q_result->num_rows > 0) {
                                                 <div class="question-pane">
                                                     <p style="font-size:17px;">
                                                         <b>Question <?php echo $qno; ?>.</b> 
-                                                        <?php echo $qs; ?> 
+                                                        <?php echo htmlspecialchars_decode($qs); ?> 
                                                         <?php echo $type_badge; ?>
                                                     </p>
                                                     <p style="text-align:right;"><b>Marks: <?php echo $qmarks; ?></b></p>
 
                                                     <?php if ($type === 'FB'): ?>
+                                                        <p><strong>Your Answer:</strong> <?= $answers[$qid] ?? "N/A" ?></p>
                                                         <p><strong>Answer:</strong> <?php echo $answer; ?></p>
                                                     <?php elseif ($type === 'TF'): ?>
-                                                        <p><strong>Answer:</strong> <?php echo $answer; ?></p>
+                                                        <p><strong>Your Answer:</strong><?= $answers[$qid] ?? "N/A" ?></p>
+                                                        <p><strong>Correct Answer:</strong> <?php echo $answer; ?></p>
                                                     <?php else: /* MC or other */ ?>
                                                         <p style="font-size:15px;"><strong>Options:</strong></p>
-                                                        <p style="font-size:15px;">A: <?php echo $op1; ?></p>
-                                                        <p style="font-size:15px;">B: <?php echo $op2; ?></p>
-                                                        <p style="font-size:15px;">C: <?php echo $op3; ?></p>
-                                                        <p style="font-size:15px;">D: <?php echo $op4; ?></p>
-                                                        <p style="font-size:15px;"><strong>Correct Answer:</strong> <?php echo $answer; ?></p>
+                                                        <p style="font-size:15px; <?= isset($answers[$qid]) && $answers[$qid] == $op1 ? "border-bottom: thin solid; padding-bottom: 0.3em; width: fit-content" : "" ?>">A: <?php echo $op1; ?></p>
+                                                        <p style="font-size:15px; <?= isset($answers[$qid]) && $answers[$qid] == $op2 ? "border-bottom: thin solid; padding-bottom: 0.3em; width: fit-content" : "" ?>">B: <?php echo $op2; ?></p>
+                                                        <p style="font-size:15px; <?= isset($answers[$qid]) && $answers[$qid] == $op3 ? "border-bottom: thin solid; padding-bottom: 0.3em; width: fit-content" : "" ?>">C: <?php echo $op3; ?></p>
+                                                        <p style="font-size:15px; <?= isset($answers[$qid]) && $answers[$qid] == $op4 ? "border-bottom: thin solid; padding-bottom: 0.3em; width: fit-content" : "" ?>">D: <?php echo $op4; ?></p>
+                                                        <p style="font-size:15px;"><strong>Correct Answer:</strong> <?php echo $q[$answer] ?? $answer; ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>

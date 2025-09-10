@@ -45,11 +45,28 @@ $end_time = mysqli_real_escape_string($conn, $_POST['end_time']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
 $class = mysqli_real_escape_string($conn, $_POST['class']);
 
+// convert dates
+$date = date('Y-m-d', strtotime($date));
+if ($end_exam_date) {
+    $end_exam_date = "'".date('Y-m-d', strtotime($end_exam_date))."'";
+} else {
+    $end_exam_date = "NULL"; // Set to null if not provided
+}
+
 // Result publication scheduling fields
 $result_publish_start_date = isset($_POST['result_publish_start_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_date']) : null;
 $result_publish_start_time = isset($_POST['result_publish_start_time']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_time']) : null;
 $result_publish_end_date = isset($_POST['result_publish_end_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_end_date']) : null;
 $result_publish_end_time = isset($_POST['result_publish_end_time']) ? mysqli_real_escape_string($conn, $_POST['result_publish_end_time']) : null;
+
+// convert dates
+if ($result_publish_start_date) {
+    $result_publish_start_date = date('Y-m-d', strtotime($result_publish_start_date));
+} 
+
+if ($result_publish_end_date) {
+    $result_publish_end_date = date('Y-m-d', strtotime($result_publish_end_date));
+} 
 
 // Determine result publication status
 $result_publish_status = 'Not Published';
@@ -96,7 +113,7 @@ if ($result && $result->num_rows > 0) {
 } else {
 
 $sql = "INSERT INTO tbl_examinations (exam_id, class, subject, exam_name, date, start_time, end_time, duration, passmark, full_marks, re_exam, end_exam_date, status, result_publish_start_date, result_publish_start_time, result_publish_end_date, result_publish_end_time, result_publish_status, created_by, created_by_type)
-VALUES ('$exam_id', '$class', '$subject', '$exam', '$date', '$start_time', '$end_time', '$duration', '$passmark', '$f_marks', 0, '$end_exam_date', 'Inactive', " . 
+VALUES ('$exam_id', '$class', '$subject', '$exam', '$date', '$start_time', '$end_time', '$duration', '$passmark', '$f_marks', 0, $end_exam_date, 'Inactive', " . 
 ($result_publish_start_date ? "'$result_publish_start_date'" : "NULL") . ", " .
 ($result_publish_start_time ? "'$result_publish_start_time'" : "NULL") . ", " .
 ($result_publish_end_date ? "'$result_publish_end_date'" : "NULL") . ", " .

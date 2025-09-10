@@ -7,7 +7,7 @@
 /**
  * Categorize exams for a student based on current time and exam schedule
  */
-function categorizeExamsForStudent($class, $conn) {
+function categorizeExamsForStudent($class, $conn, $student_id) {
     $current_time = time();
     $current_date = date('Y-m-d H:i:s');
     
@@ -16,53 +16,60 @@ function categorizeExamsForStudent($class, $conn) {
         'active' => array(),
         'past' => array()
     );
-    
-    // Get all exams for the student's class
-    $sql = "SELECT * FROM tbl_examinations WHERE class = ? ORDER BY date ASC, start_time ASC";
+
+    // retrieve pending exams
+    $sql = "SELECT * FROM tbl_examinations
+        WHERE `class` = ?
+          AND TIMESTAMP(`date`, `start_time`) > ?
+        ORDER BY `date` ASC, `start_time` ASC";
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $class);
+    $stmt->bind_param("ss", $class, $current_date);
     $stmt->execute();
     $result = $stmt->get_result();
+    $exams["pending"] = $result->fetch_all(MYSQLI_ASSOC);
+
+    // retrieve active
+    $sql = "SELECT e.*
+            FROM tbl_examinations e
+            LEFT JOIN tbl_assessment_records ar
+            ON e.exam_id = ar.exam_id AND ar.student_id = ?
+            WHERE e.class = ?
+            AND e.status = 'Active'
+            AND TIMESTAMP(e.date, e.start_time) <= NOW()
+            AND (
+                    (e.end_exam_date IS NULL AND TIMESTAMP(e.date, e.end_time) >= NOW())
+                    OR (e.end_exam_date IS NOT NULL AND TIMESTAMP(e.end_exam_date, e.end_time) >= NOW())
+                )
+            AND ar.exam_id IS NULL
+            ORDER BY e.date ASC, e.start_time ASC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $student_id, $class);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $exams["active"] = $result->fetch_all(MYSQLI_ASSOC);
+
+    $sql = "SELECT e.*, ar.record_id, ar.rstatus
+        FROM tbl_examinations e
+        LEFT JOIN tbl_assessment_records ar
+          ON e.exam_id = ar.exam_id AND ar.student_id = ?
+        WHERE e.class = ?
+          AND (
+                ar.record_id IS NOT NULL
+                OR (
+                    (e.end_exam_date IS NULL AND TIMESTAMP(e.date, e.end_time) < NOW())
+                    OR (e.end_exam_date IS NOT NULL AND TIMESTAMP(e.end_exam_date, e.end_time) < NOW())
+                  )
+              )
+        ORDER BY e.date DESC, e.start_time DESC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $student_id, $class);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $exams["past"] = $result->fetch_all(MYSQLI_ASSOC);
     
-    while ($row = $result->fetch_assoc()) {
-        // Convert date format from MM/DD/YYYY to YYYY-MM-DD for proper parsing
-        $start_date = $row['date'];
-        $end_date = $row['end_exam_date'];
-        
-        // Handle different date formats
-        if (strpos($start_date, '/') !== false) {
-            // Convert MM/DD/YYYY to YYYY-MM-DD
-            $start_parts = explode('/', $start_date);
-            if (count($start_parts) == 3) {
-                $start_date = $start_parts[2] . '-' . str_pad($start_parts[0], 2, '0', STR_PAD_LEFT) . '-' . str_pad($start_parts[1], 2, '0', STR_PAD_LEFT);
-            }
-        }
-        
-        if (strpos($end_date, '/') !== false) {
-            // Convert MM/DD/YYYY to YYYY-MM-DD
-            $end_parts = explode('/', $end_date);
-            if (count($end_parts) == 3) {
-                $end_date = $end_parts[2] . '-' . str_pad($end_parts[0], 2, '0', STR_PAD_LEFT) . '-' . str_pad($end_parts[1], 2, '0', STR_PAD_LEFT);
-            }
-        }
-        
-        $exam_start_time = strtotime($start_date . ' ' . $row['start_time']);
-        $exam_end_time = strtotime($end_date . ' ' . $row['end_time']);
-        
-        // Debug: Add some logging
-        error_log("Exam: " . $row['exam_name'] . " - Start: " . $start_date . ' ' . $row['start_time'] . " (" . $exam_start_time . ") - End: " . $end_date . ' ' . $row['end_time'] . " (" . $exam_end_time . ") - Current: " . $current_time);
-        
-        if ($current_time < $exam_start_time) {
-            // Exam hasn't started yet
-            $exams['pending'][] = $row;
-        } elseif ($current_time >= $exam_start_time && $current_time <= $exam_end_time) {
-            // Exam is currently active
-            $exams['active'][] = $row;
-        } else {
-            // Exam has ended
-            $exams['past'][] = $row;
-        }
-    }
     
     return $exams;
 }
@@ -141,20 +148,7 @@ function generateExamActionButton($exam, $exam_status) {
         $exam_end_time = strtotime($exam['end_exam_date'] . ' ' . $exam['end_time']);
         
         // Check if student has taken the exam and has results
-        $results = getExamResults($myid, $exam_id, $conn);
-        $results_published = false;
-        
-        if ($results && !empty($results['score'])) {
-            // Check the rstatus field in assessment records
-            if (isset($results['rstatus']) && $results['rstatus'] === 'Result Published') {
-                $results_published = true;
-            } else {
-                // Fallback: Results are considered published if exam has ended and student has a score
-                if ($current_time > $exam_end_time) {
-                    $results_published = true;
-                }
-            }
-        }
+        $results_published = $exam["rstatus"] == "Result Published" || $exam["result_publish_status"] == "Published";
         
         if ($results_published) {
             return '<a class="btn btn-info btn-rounded btn-sm" href="view-past-exam.php?id=' . $exam_id . '">

@@ -121,8 +121,13 @@ header("location:./");
                                     <div class="panel-body">
                                         <div role="tabpanel">
                                    
-                                            <ul class="nav nav-tabs" role="tablist">
+                                            <!-- <ul class="nav nav-tabs" role="tablist">
                                                 <li role="presentation" class="active"><a href="#tab5" role="tab" data-toggle="tab">Multiple Choice</a></li>
+                                            </ul> -->
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li role="presentation" class="active"><a href="#tab5" role="tab" data-toggle="tab" data-value="MC">Multiple Choice</a></li>
+                                                <li role="presentation" class=""><a href="#tab5" role="tab" data-toggle="tab" data-value="TF">Boolean (True/False)</a></li>
+                                                <li role="presentation" class=""><a href="#tab5" role="tab" data-toggle="tab" data-value="FB">Feedback</a></li>
                                             </ul>
                                             <div style="margin: 10px 0;">
                                                 <a href="bulk_upload_questions.php?exam_id=<?php echo urlencode($exam_id); ?>" class="btn btn-primary btn-sm">
@@ -256,6 +261,22 @@ header("location:./");
         <script src="../assets/js/modern.min.js"></script>
         <script src="../assets/js/pages/table-data.js"></script>
         
+        <script>
+            $(document).ready(function(){
+                $("li[role=presentation]").click(function() {
+                    let form = $("form");
+                    let action = form.attr("action");
+                    let typeValue = $(this).find("a").data("value"); // get data-value from li
+
+                    // Use URL object for easier param handling
+                    let url = new URL(action, window.location.origin);
+                    url.searchParams.set("type", typeValue);
+
+                    // Update the form action
+                    form.attr("action", url.toString());
+                });
+            })
+        </script>
     </body>
 
 </html>

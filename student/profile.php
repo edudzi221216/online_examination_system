@@ -133,7 +133,7 @@
                                             <tr>
                                                 <th scope="row">7.</th>
                                                 <td>Contact</td>
-                                                <td><b><?php echo "$mycontact"; ?></b></td>
+                                                <td><b><?php echo "$myphone"; ?></b></td>
                                                
                                             </tr>
 											

@@ -11,6 +11,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
 	$myid = $_SESSION['myid'];
 	$myclass = $_SESSION['myclass'];
 	$myfees = $_SESSION['myfees'];
+	$myphone = $_SESSION["contact"];
 	
 	if ($myrole == "student") {
 		

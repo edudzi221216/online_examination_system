@@ -18,6 +18,7 @@ if ($result->num_rows > 0) {
 	$_SESSION['last_name'] = $row['last_name'];
 	$_SESSION['gender'] = $row['gender'];
 	$_SESSION['email'] = $row['email'];
+	$_SESSION['contact'] = $row['contact'];
 	$_SESSION['ay'] = $row['ay'];
 	$_SESSION['role'] = $row['role'];
 	$_SESSION['myid'] = $row['user_id'];

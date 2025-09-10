@@ -14,6 +14,7 @@ if ($result->num_rows > 0) {
 	$tdlname = $row['last_name'];
 	$tdgender = $row['gender'];
 	$tdemail = $row['email'];
+    $tdphone = $row["contact"];
 
 	
 
@@ -154,6 +155,10 @@ if ($result->num_rows > 0) {
                                             <label for="exampleInputEmail1">Email</label>
                                             <input type="email" value="<?php echo "$tdemail"; ?>" class="form-control" placeholder="Enter last name" name="email" required autocomplete="off">
                                         </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Phone Number</label>
+                                            <input type="tel" class="form-control" placeholder="Enter Phone Number" name="contact" autocomplete="off" value="<?= $tdphone ?>">
+                                        </div>
 										<div class="form-group">
 										  <label for="exampleInputEmail1">Male</label>
                                             <input type="radio"  <?php if ($tdgender == "Male") { print ' checked '; } ?> name="gender" value="Male" required>
@@ -168,6 +173,7 @@ if ($result->num_rows > 0) {
                                       <input type="hidden" name="teacher_id" value="<?php echo "$teacher_id"; ?>">
 
                                         <button type="submit" class="btn btn-primary">Update <?php echo "$sdfname"; ?></button>
+                                        <button type="button" onclick="location.href='teacher.php'" class="btn btn-primary">Cancel</button>
                                        </form>
                                     </div>
                                 </div>  

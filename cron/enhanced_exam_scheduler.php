@@ -10,11 +10,15 @@
  * 0,5,10,15,20,25,30,35,40,45,50,55 * * * * php /path/to/your/project/cron/enhanced_exam_scheduler.php
  */
 
+// Get the directory where this script is located
+$script_dir = dirname(__FILE__);
+$project_root = dirname($script_dir);
+
 // Include database configuration
-require_once '../database/config.php';
+require_once $project_root.'/database/config.php';
 
 // Include enhanced exam scheduler functions
-require_once '../includes/enhanced_exam_scheduler.php';
+require_once $project_root.'/includes/enhanced_exam_scheduler.php';
 
 // Set timezone
 // Set timezone from config or use default
@@ -22,11 +26,11 @@ $timezone = defined('DEFAULT_TIMEZONE') ? DEFAULT_TIMEZONE : 'UTC';
 date_default_timezone_set($timezone);
 
 // Log file for tracking updates
-$log_file = '../logs/enhanced_exam_scheduler.log';
+$log_file = $project_root.'/logs/enhanced_exam_scheduler.log';
 
 // Create logs directory if it doesn't exist
-if (!file_exists('../logs')) {
-    mkdir('../logs', 0755, true);
+if (!file_exists($project_root.'/logs')) {
+    mkdir($project_root.'/logs', 0755, true);
 }
 
 // Function to log messages

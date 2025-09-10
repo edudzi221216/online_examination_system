@@ -233,6 +233,11 @@ include 'includes/check_user.php';
                                             <input type="email" class="form-control" placeholder="Enter email address" name="email" required autocomplete="off">
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Phone Number</label>
+                                            <input type="tel" class="form-control" placeholder="Enter Phone Number" name="contact" autocomplete="off">
+                                        </div>
+
                                         <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Submit</button>
                                        </form>
                                                 </div>

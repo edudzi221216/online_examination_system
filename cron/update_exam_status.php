@@ -10,11 +10,15 @@
  * See README.md for cron setup instructions.
  */
 
+ // Get the directory where this script is located
+$script_dir = dirname(__FILE__);
+$project_root = dirname($script_dir);
+
 // Include database configuration
-require_once '../database/config.php';
+require_once $project_root.'/database/config.php';
 
 // Include exam scheduler functions
-require_once '../includes/exam_scheduler.php';
+require_once $project_root.'/includes/exam_scheduler.php';
 
 // Set timezone
 // Set timezone from config or use default
@@ -22,11 +26,11 @@ $timezone = defined('DEFAULT_TIMEZONE') ? DEFAULT_TIMEZONE : 'UTC';
 date_default_timezone_set($timezone);
 
 // Log file for tracking updates
-$log_file = '../logs/exam_status_updates.log';
+$log_file = $project_root.'/logs/exam_status_updates.log';
 
 // Create logs directory if it doesn't exist
-if (!file_exists('../logs')) {
-    mkdir('../logs', 0755, true);
+if (!file_exists($project_root.'/logs')) {
+    mkdir($project_root.'/logs', 0755, true);
 }
 
 // Function to log messages

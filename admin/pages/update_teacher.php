@@ -7,6 +7,7 @@ $lname = ucwords(mysqli_real_escape_string($conn, $_POST['lname']));
 $email = mysqli_real_escape_string($conn, $_POST['email']);
 $gender = mysqli_real_escape_string($conn, $_POST['gender']);
 $password = md5($_POST['password']);
+$contact = mysqli_real_escape_string($conn, $_POST['contact']);
 $teacher_id = $_POST['teacher_id'] ;
 
 //	basically this query checks whether the existing data is same or not.
@@ -27,17 +28,18 @@ if ($result->num_rows > 0) {
     }
 } else { */
 	// this query update the new data from edit-teacher.php page
-$sql = "UPDATE tbl_teacher SET first_name = '$fname', last_name = '$lname', gender = '$gender',  email = '$email', login ='$password'  WHERE teacher_id='$teacher_id'";
+$sql = "UPDATE tbl_teacher SET first_name = '$fname', last_name = '$lname', gender = '$gender',  email = '$email', login ='$password', contact='$contact'  WHERE teacher_id='$teacher_id'";
 
+$from = $_SERVER["HTTP_REFERER"];
 if ($conn->query($sql) === TRUE) {
   echo "<script>
     alert('Teacher updated successfully. TEACHER ID: '+'$teacher_id');
-    window.location.href='../teacher.php?Added Successfully';
+    window.location.href='$from';
     </script>";
 } else {
   echo "<script>
     alert('Could not add teacher.');
-    window.location.href='../edit-teacher.php?Could Not Apply Settings&tid=$teacher_id';
+    window.location.href='$from';
     </script>";
 }
 
