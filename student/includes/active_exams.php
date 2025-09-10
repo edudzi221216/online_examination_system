@@ -27,7 +27,7 @@
             include '../includes/student_exam_status.php';
 
                         // Get categorized exams for the student's class
-            $categorized_exams = categorizeExamsForStudent($myclass, $conn);
+            $categorized_exams = categorizeExamsForStudent($myclass, $conn, $_SESSION["myid"]);
                         $active_exams = $categorized_exams['active'];
                         $pending_exams = $categorized_exams['pending'];
                         $past_exams = $categorized_exams['past'];
