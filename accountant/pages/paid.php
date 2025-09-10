@@ -10,7 +10,7 @@ $sql = "UPDATE tbl_users SET fees='Paid' WHERE user_id='$student_id'";
 
 if ($conn->query($sql) === TRUE) {
 
-    $sql = "UPDATE tbl_assessment_records SET fstatus='Paid' WHERE student_id='$student_id'";
+    $sql = "UPDATE tbl_assessment_records SET fstatus='Paid' WHERE student_id='$student_id' AND fstatus='Unpaid'";
     if ($conn->query($sql) === TRUE) {
     } else {
     }
