@@ -2,7 +2,9 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
     
-    $root_path = $_SERVER["DOCUMENT_ROOT"];
+    $script_dir = dirname(__FILE__);
+$root_path = dirname($script_dir);
+
     require $root_path.'/vendor/autoload.php';
 
     function get_server_url(){
