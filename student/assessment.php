@@ -429,16 +429,6 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
     <script src="../assets/plugins/3d-bold-navigation/js/main.js"></script>
     <script src="../assets/js/modern.min.js"></script>
 
-    <script type="text/javascript">
-        $document.ready(function() {
-            $('block').bind('cut copy paste', function(e) {
-                e.preventDefault();
-            })
-            $('block').on("contextmenu", function(e) {
-                return false;
-            })
-        })
-    </script>
     <!--TIMER-->
     <script type="text/javascript">
         var max_time = <?php echo "$duration" ?>;
@@ -504,8 +494,6 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
                 if (a <= 2) {
                     alert("You have moved " + a + " times from the Exam window. You are not allowed to do this.");
                 } else if (a == 3) {
-                    alert("We are watching you! You have moved " + a + " times from the Exam window. You are not allowed to do this.\nThis is the Final Warning for you.");
-                } else if (a == 4) {
                     alert("You are moving away from the browser too many times. Your Exam has been Submitted.");
                     setTimeout('document.quiz.submit()', 4);
                 } else {}
@@ -513,6 +501,24 @@ VALUES ('$recid', '$myid', '$myname','$myclass', '$exam_name', '$exam_id','$subj
 
         });
     </script><!--Tab change code ends here-->
+
+    <!-- Prevent copy, paste and right click -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            $("input[type=text]").on("keydown keyup", function(e){
+                if (e.ctrlKey && (e.key === "v" || e.key === "c" || e.key === "x")) {
+                    e.preventDefault();
+                    alert("Copy and Paste are disabled!");
+                }
+            });
+
+            // disable right click
+            document.addEventListener("contextmenu", function(e){
+                e.preventDefault();
+            });
+
+        })
+    </script>
 
     <!-- Take user's values for each question -->
     <script>

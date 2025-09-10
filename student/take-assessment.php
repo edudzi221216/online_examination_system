@@ -287,7 +287,7 @@ header("location:./");
                                 
 								print '
                                  <div class="alert alert-success" role="alert">
-                                  You Exam is Submitted.
+                                  Your Exam is Submitted.
                                     </div>
 
 									'; /*?>
