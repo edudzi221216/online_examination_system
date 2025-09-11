@@ -135,6 +135,7 @@ $class = mysqli_real_escape_string($conn, $_GET['cn']);
                                                 <th>Duration</th>
 												<th>Passmark</th>
                                                 <th>View Results</th>
+                                                <th>Publish</th>
                                                 
                                             </tr>
                                         </thead>
@@ -147,6 +148,7 @@ $class = mysqli_real_escape_string($conn, $_GET['cn']);
                                                 <th>Duration</th>
 												<th>Passmark</th>
                                                 <th>View Results</th>
+                                                <th>Publish</th>
                                                 
                                             </tr>
                                         </tfoot>
@@ -165,7 +167,10 @@ $class = mysqli_real_escape_string($conn, $_GET['cn']);
 																							
                                                </ul>
                                                 <td><a href="view-results.php?eid='.$row['exam_id'].'" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View Results</a></td> 
-                                                
+                                                <td>
+                                                    <a href="single_publish.php?eid='.$row['exam_id'].'&status=1" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> Publish</a>
+                                                    <a href="single_publish.php?eid='.$row['exam_id'].'&status=2" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> Unpublish</a>
+                                                </td>                 
                                 
                                                 </ul>
                                                

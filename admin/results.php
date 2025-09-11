@@ -190,6 +190,10 @@ if (isset($_GET['cn'])) {
 																							
                                                </ul>
                                                 <td><a href="view-results.php?eid='.$row['exam_id'].'" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View Results</a></td> 
+                                                <td>
+                                                    <a href="view-results.php?eid='.$row['exam_id'].'" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> Publish</a>
+                                                    <a href="view-results.php?eid='.$row['exam_id'].'" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> Unpublish</a>
+                                                </td> 
                                                 
                                 
                                                 </ul>
