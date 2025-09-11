@@ -38,8 +38,46 @@ $end_time = mysqli_real_escape_string($conn, $_POST['end_time']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
 $class = mysqli_real_escape_string($conn, $_POST['class']);
 
+// convert dates
 $date = date('Y-m-d', strtotime($date));
-$end_exam_date = $end_exam_date ? "'".date('Y-m-d', strtotime($end_exam_date))."'" : "NULL";
+$end_exam_date = date('Y-m-d', strtotime($end_exam_date));
+
+$start_date_time = "$date $start_time";
+$end_date_time = "$end_exam_date $end_time";
+$time_error = "";
+
+// validate exam times
+if(strtotime($end_date_time) <= strtotime($start_time)){
+    $time_error = "End date cannot be lesser than the start date";
+}else if(date_diff(new DateTime($end_date_time), new DateTime($start_date_time)) < $duration){
+    $time_error = "Your duration is not within the time limit of the exam";
+}
+
+if(!empty($time_error)){
+    echo "<script>
+        alert('$time_error');
+        window.location.href='$back';
+        </script>";
+    exit();
+}
+
+// validate mark values
+$mark_error = "";
+if(empty($f_marks) || $f_marks < 0){
+    $mark_error = "Your full mark should be greater than zero";
+}elseif(empty($passmark) || $passmark < 0){
+    $mark_error = "Your passmark mark should be greater than zero";
+}elseif($f_marks < $passmark){
+    $mark_error = "Your full mark cannot be less than the pass mark";
+}
+
+if(!empty($mark_error)){
+    echo "<script>
+        alert('$mark_error');
+        window.location.href='$back';
+        </script>";
+    exit();
+}
 
 // Result publication scheduling fields
 $result_publish_start_date = isset($_POST['result_publish_start_date']) ? mysqli_real_escape_string($conn, $_POST['result_publish_start_date']) : null;

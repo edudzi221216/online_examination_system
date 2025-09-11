@@ -231,7 +231,7 @@ if (isset($_GET['cn'])) {
                 </div>
                 
             </div>
-            <!--<div class="oes">Designed and Developed by Koushik Sadhu &amp; Nishikant Mandal.</div>-->
+            
         </main>
 	
         <div class="cd-overlay"></div>
