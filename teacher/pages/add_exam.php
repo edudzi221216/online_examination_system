@@ -13,6 +13,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true || $_SESSION['role
 }
 
 $teacher_id = $_SESSION['myid'];
+$back = $_SERVER["HTTP_REFERER"];
 
 // Check if form was submitted
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -49,10 +50,43 @@ $class = mysqli_real_escape_string($conn, $_POST['class']);
 
 // convert dates
 $date = date('Y-m-d', strtotime($date));
-if ($end_exam_date) {
-    $end_exam_date = "'".date('Y-m-d', strtotime($end_exam_date))."'";
-} else {
-    $end_exam_date = 'NULL'; // Set to null if not provided
+$end_exam_date = date('Y-m-d', strtotime($end_exam_date));
+
+$start_date_time = "$date $start_time";
+$end_date_time = "$end_exam_date $end_time";
+$time_error = "";
+
+// validate exam times
+if(strtotime($end_date_time) <= strtotime($start_time)){
+    $time_error = "End date cannot be lesser than the start date";
+}else if(date_diff(new DateTime($end_date_time), new DateTime($start_date_time)) < $duration){
+    $time_error = "Your duration is not within the time limit of the exam";
+}
+
+if(!empty($time_error)){
+    echo "<script>
+        alert('$time_error');
+        window.location.href='$back';
+        </script>";
+    exit();
+}
+
+// validate mark values
+$mark_error = "";
+if(empty($f_marks) || $f_marks < 0){
+    $mark_error = "Your full mark should be greater than zero";
+}elseif(empty($passmark) || $passmark < 0){
+    $mark_error = "Your passmark mark should be greater than zero";
+}elseif($f_marks < $passmark){
+    $mark_error = "Your full mark cannot be less than the pass mark";
+}
+
+if(!empty($mark_error)){
+    echo "<script>
+        alert('$mark_error');
+        window.location.href='$back';
+        </script>";
+    exit();
 }
 
 // Result publication scheduling fields
@@ -69,6 +103,32 @@ if ($result_publish_start_date) {
 if ($result_publish_end_date) {
     $result_publish_end_date = date('Y-m-d', strtotime($result_publish_end_date));
 } 
+
+// validate publish dates
+if($result_publish_start_date && empty($result_publish_end_date)){
+    $time_error = "Provide a publishing end date";
+}elseif($result_publish_start_date && empty($result_publish_start_time)){
+    $time_error = "Provide the publishing start time";
+}elseif($result_publish_end_date && empty($result_publish_end_time)){
+    $time_error = "Provide the publishing end time";
+}
+
+if(empty($time_error) && $result_publish_start_date){
+    $publishing_date_time = "$result_publish_start_date $result_publish_start_time";
+    $unpublishing_date_time = "$result_publish_end_date $result_publish_end_time";
+
+    if(strtotime($unpublishing_date_time) < strtotime($publishing_date_time)){
+        $time_error = "Your publishing end date cannot be less than the start date";
+    }
+}
+
+if(!empty($time_error)){
+    echo "<script>
+        alert('$time_error');
+        window.location.href='$back';
+        </script>";
+    exit();
+}
 
 // Determine result publication status
 $result_publish_status = 'Not Published';
@@ -92,15 +152,6 @@ if (!preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $start_time)) {
 }
 if (!preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $end_time)) {
     $end_time .= ':00';
-}
-
-//Validate that end time is after start time
-if (strtotime($end_time) <= strtotime($start_time)) {
-    echo "<script>
-        alert('End time must be after start time.');
-        window.location.href='../examinations.php';
-        </script>";
-    exit();
 }
 
 $sql = "SELECT * FROM tbl_examinations WHERE exam_name = '$exam' AND subject = '$subject' AND class = '$class'";

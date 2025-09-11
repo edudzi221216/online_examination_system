@@ -9,6 +9,7 @@ $dbname = "exam_db";
 
 // Timezone configuration - change this to your local timezone
 define('DEFAULT_TIMEZONE', 'UTC'); // Change to your timezone, e.g., 'America/New_York', 'Europe/London', 'Asia/Tokyo'
+date_default_timezone_set(DEFAULT_TIMEZONE);
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);

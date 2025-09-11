@@ -320,7 +320,7 @@ header("location:./");
                                         </div>
 									<div class="form-group">
                                     <label >Date of Birth</label>
-                                    <input type="text" class="form-control date-picker" name="dob" required autocomplete="off" placeholder="Select date of birth">
+                                    <input type="date" class="form-control" name="dob" required autocomplete="off" placeholder="Select date of birth">
                                     </div>
 									
 									<div class="form-group">

@@ -162,11 +162,11 @@ $conn->close();
 										
 									<div class="form-group">
                                     <label >Start Exam Date</label>
-                                    <input type="text" class="form-control date-picker" value="<?php echo"$exdate"; ?>" name="date" required autocomplete="off" placeholder="Select Start Exam Date">
+                                    <input type="date" class="form-control" value="<?php echo"$exdate"; ?>" name="date" required autocomplete="off" placeholder="Select Start Exam Date">
                                     </div>
 									<div class="form-group">
                                     <label >End Exam Date</label>
-                                    <input type="text" class="form-control date-picker" value="<?php echo"$exend_exam_date"; ?>" name="end_exam_date" required autocomplete="off" placeholder="Select End Exam Date">
+                                    <input type="date" class="form-control" value="<?php echo"$exend_exam_date"; ?>" name="end_exam_date" required autocomplete="off" placeholder="Select End Exam Date">
                                     </div>
 									<div class="form-group">
                                     <label >Start Time</label>
@@ -241,7 +241,7 @@ $conn->close();
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="resultPublishStartDate">Result Publication Start Date</label>
-                                                            <input type="text" class="form-control date-picker" id="resultPublishStartDate" name="result_publish_start_date" value="<?php echo $result_publish_start_date; ?>" autocomplete="off" placeholder="Select Start Date">
+                                                            <input type="date" class="form-control" id="resultPublishStartDate" name="result_publish_start_date" value="<?php echo $result_publish_start_date; ?>" autocomplete="off" placeholder="Select Start Date">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="resultPublishStartTime">Result Publication Start Time</label>
@@ -251,7 +251,7 @@ $conn->close();
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="resultPublishEndDate">Result Publication End Date</label>
-                                                            <input type="text" class="form-control date-picker" id="resultPublishEndDate" name="result_publish_end_date" value="<?php echo $result_publish_end_date; ?>" autocomplete="off" placeholder="Select End Date">
+                                                            <input type="date" class="form-control" id="resultPublishEndDate" name="result_publish_end_date" value="<?php echo $result_publish_end_date; ?>" autocomplete="off" placeholder="Select End Date">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="resultPublishEndTime">Result Publication End Time</label>

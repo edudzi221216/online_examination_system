@@ -453,11 +453,11 @@ $teacher_id = $mytid; // Use the variable from check_user.php
                                         </div>
 										<div class="form-group">
                                                             <label>Start Exam Date</label>
-                                                            <input type="text" class="form-control date-picker" name="date" placeholder="Select Start Exam Date" required autocomplete="off">
+                                                            <input type="date" class="form-control" name="date" placeholder="Select Start Exam Date" required autocomplete="off">
                                         </div>
 										<div class="form-group">
                                                             <label>End Exam Date</label>
-                                                            <input type="text" class="form-control date-picker" name="end_exam_date" placeholder="Select End Exam Date" required autocomplete="off">
+                                                            <input type="date" class="form-control" name="end_exam_date" placeholder="Select End Exam Date" required autocomplete="off">
                                         </div>
                                         <div class="form-group">
                                                             <label>Start Time</label>
@@ -528,7 +528,7 @@ $teacher_id = $mytid; // Use the variable from check_user.php
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label>Result Publication Start Date</label>
-                                                                            <input type="text" class="form-control date-picker" name="result_publish_start_date" placeholder="Select Start Date">
+                                                                            <input type="date" class="form-control" name="result_publish_start_date" placeholder="Select Start Date">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label>Result Publication Start Time</label>
@@ -538,7 +538,7 @@ $teacher_id = $mytid; // Use the variable from check_user.php
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label>Result Publication End Date</label>
-                                                                            <input type="text" class="form-control date-picker" name="result_publish_end_date" placeholder="Select End Date">
+                                                                            <input type="date" class="form-control" name="result_publish_end_date" placeholder="Select End Date">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label>Result Publication End Time</label>

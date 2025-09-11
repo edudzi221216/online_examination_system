@@ -31,7 +31,7 @@
                         $active_exams = $categorized_exams['active'];
                         $pending_exams = $categorized_exams['pending'];
                         $past_exams = $categorized_exams['past'];
-
+                    
             // Display Active Exams
                         if (count($active_exams) > 0) {
                 echo '<div class="panel panel-success">
@@ -73,21 +73,10 @@
                             }
                 
                             echo '</tbody></table></div></div></div>';
-            }elseif(isset($dashboard)){
-                echo <<<HTML
-                <tbody>
-                    <tr>
-                        <td colspan="8" class="text-center">
-                            <div class="alert alert-info" role="alert">
-                                <strong>No active exams available at the moment.</strong> Please check back later.
-                            </div>
-                        </td>
-                </tbody>
-                HTML;
-            }
+                        }
 
             // Display Pending Exams with Countdown
-            if (count($pending_exams) > 0 && !isset($dashboard)) {
+            if (count($pending_exams) > 0) {
                 echo generateExamTable($pending_exams, 'pending', true);
             }
 
