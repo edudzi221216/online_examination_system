@@ -246,8 +246,8 @@
         <div class="login-form">
             <div class="section-header">
                 <i class="fa fa-graduation-cap icon-large"></i>
-                <h2>EMS Login</h2>
-                <p>Examination Management System</p>
+                <h2>OQMS Login</h2>
+                <p>Online Quiz Management System</p>
             </div>
             
             <div class="user-type-selector">
